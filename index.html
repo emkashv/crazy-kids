@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Crazy Kids</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="crazykids.jpg">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      height: 100%;
+      font-family: sans-serif;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: url('https://i.postimg.cc/7PsTzvvq/10.jpg') no-repeat center center fixed;
+      background-size: cover;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      background: purple;
+      color: white;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo-img {
+      height: 50px;
+      border-radius: 50%;
+    }
+
+    .menu-btn {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+      gap: 5px;
+    }
+
+    .menu-btn span {
+      width: 25px;
+      height: 3px;
+      background: white;
+      transition: 0.3s;
+    }
+
+    nav {
+      display: flex;
+      gap: 20px;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      position: relative;
+      transition: 0.5s;
+    }
+
+    nav a::after {
+      content: "";
+      position: absolute;
+      width: 0%;
+      height: 2px;
+      bottom: -3px;
+      left: 0;
+      background-color: yellow;
+      transition: width 0.3s;
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    nav a:hover {
+      background: linear-gradient(45deg, rgb(249, 140, 236), rgb(255, 255, 9));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    hr {
+      height: 9px;
+      background: linear-gradient(to right, magenta, rgb(75, 0, 75));
+      border-radius: 5px;
+      border: none;
+    }
+
+    @media (max-width: 768px) {
+      .menu-btn {
+        display: flex;
+      }
+
+      nav {
+        flex-direction: column;
+        position: absolute;
+        top: 70px;
+        right: 20px;
+        background: purple;
+        padding: 15px;
+        display: none;
+        border-radius: 8px;
+      }
+
+      nav.active {
+        display: flex;
+      }
+    }
+
+    .hero {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      text-shadow: 2px 2px 4px #000;
+      font-size: 48px;
+      font-weight: bold;
+      animation: fadeIn 2s ease;
+    }
+
+    section {
+      padding: 100px 20px;
+      background: rgba(227, 227, 227, 0.9);
+      color: #333;
+    }
+
+    section h2 {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #222;
+      color: white;
+    }
+
+    .carousel-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      max-width: 700px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .carousel {
+      position: relative;
+      width: 600px;
+      height: 400px;
+      overflow: hidden;
+    }
+
+    .slide {
+      display: none;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    .slide.active {
+      display: block;
+      animation: fadeIn 1s;
+    }
+
+    button.prev,
+    button.next {
+      background: purple;
+      color: white;
+      border: none;
+      padding: 15px 20px;
+      font-size: 20px;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: darkmagenta;
+    }
+
+    .about-content {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .about-text {
+      flex: 1;
+      min-width: 250px;
+    }
+
+    .about-img img {
+      max-width: 300px;
+      width: 100%;
+      border-radius: 10px;
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .team-card {
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    .team-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .team-card h3 {
+      margin: 10px 0 5px;
+      font-size: 18px;
+      color: purple;
+    }
+
+    .team-card h4 {
+      margin: 0 0 10px;
+      font-size: 16px;
+      color: #555;
+    }
+
+    .team-card p {
+      padding: 0 10px 10px;
+      font-size: 14px;
+    }
+
+    .contacts-content {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .contact-left, .contact-right {
+      flex: 1;
+      min-width: 250px;
+    }
+
+    .contact-left p {
+      margin-bottom: 10px;
+    }
+
+    .contact-right iframe {
+      width: 100%;
+      height: 300px;
+      border-radius: 8px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .parallax {
+      background: url('https://i.postimg.cc/4Nb4cMFW/4.jpg') no-repeat center center;
+      background-attachment: fixed;
+      background-size: cover;
+      height: 400px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-size: 36px;
+      font-weight: bold;
+      text-shadow: 2px 2px 5px #000;
+    }
+
+    .schedule-wrapper {
+      background: linear-gradient(rgb(102, 3, 121) 44%, rgb(218, 167, 13) 100%);
+      padding: 50px 0;
+    }
+
+    .schedule-section {
+      background: beige;
+      color: black;
+      border-radius: 8px;
+      padding: 40px 20px;
+      max-width: 700px;
+      margin: 0 auto;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .schedule-section ul {
+      list-style-type: none;
+      padding-left: 0;
+    }
+
+    .schedule-section li {
+      padding: 5px 0;
+    }
+
+    .whatsapp-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.whatsapp-button img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.whatsapp-button img:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+}
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">
+      <img src="crazykids.jpg" alt="Crazy Kids" class="logo-img">
+    </div>
+    <div class="menu-btn" onclick="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <nav id="menu">
+      <a href="#about"><strong>О нас</strong></a>
+      <a href="#gallery"><strong>Галерея</strong></a>
+      <a href="#contacts"><strong>Контакты</strong></a>
+      <a href="#schedule"><strong>Расписание</strong></a>
+      <a href="#team"><strong>Команда</strong></a>
+    </nav>
+  </header>
+
+  <div class="hero">Лагерь Crazy Kids</div>
+
+  <section id="about">
+    <div class="about-content">
+      <div class="about-text">
+        <h2>О нас</h2>
+        <p>Наш лагерь — это место, где каждый ребёнок сможет найти друзей, развить свои таланты и провести незабываемые каникулы на природе. Каждый день мы начинаем с энергичной и веселой зарядки, идем в бассейн и аквапарк, едим вкусную и <b>полезную</b> еду, также проводим уроки и занимаемся спортом. В лагере проходит 3 смены по 10 дней: 1-10, 10-20, 20-30 июля. Трансфер БАКУ-НАБРАНЬ-БАКУ включен. Лагерь подходит для детей 7-17 лет. Стоимость одной смены 500 азн. У нас скучно не бывает!</p>
+      </div>
+      <div class="about-img">
+        <img src="crazykids2.jpg" alt="О лагере Crazy Kids" />
+      </div>
+    </div>
+  </section>
+
+  <div class="parallax">Отдых, который вдохновляет!</div>
+
+  <section id="gallery">
+    <h2>Галерея</h2>
+    <div class="carousel-container">
+      <button class="prev" onclick="prevSlide()">←</button>
+      <div class="carousel">
+        <img src="IMG_9509.JPG" class="slide active" alt="Фото 1" />
+        <img src="futbik.jpg" class="slide" alt="Фото 2" />
+        <img src="1.jpg" class="slide" alt="Фото 3" />
+        <img src="2.jpg" class="slide" alt="Фото 4" />
+        <img src="3.jpg" class="slide" alt="Фото 5" />
+        <img src="4.jpg" class="slide" alt="Фото 6" />
+        <img src="5.jpg" class="slide" alt="Фото 7" />
+        <img src="6.jpg" class="slide" alt="Фото 8" />
+        <img src="7.jpg" class="slide" alt="Фото 9" />
+        <img src="8.jpg" class="slide" alt="Фото 10" />
+        <img src="9.jpg" class="slide" alt="Фото 11" />
+        <img src="10.jpg" class="slide" alt="Фото 12" />
+      </div>
+      <button class="next" onclick="nextSlide()">→</button>
+    </div>
+  </section>
+
+  <hr>
+
+  <section id="team">
+    <h2>Наша команда</h2>
+    <div class="team-grid">
+      <div class="team-card">
+        <img src="team1.jpg" alt="Альфия Ахмеджанова">
+        <h3>Альфия Ахмеджанова</h3>
+        <h4>Директор лагеря</h4>
+        <p>Руководит всеми процессами лагеря.</p>
+      </div>
+      <div class="team-card">
+        <img src="team2.jpg" alt="Султанья">
+        <h3>Султанья Саидахмедова</h3>
+        <h4>Повариха</h4>
+        <p>Отвечает за вкусные и сбалансированные блюда.</p>
+      </div>
+      <div class="team-card">
+        <img src="team3.jpg" alt="Амина ">
+        <h3>Амина Ахмеджанова</h3>
+        <h4>Вожатая, педагог английского и химии.</h4>
+        <p></p>
+      </div>
+      <div class="team-card">
+        <img src="team4.jpg" alt="Зулейха">
+        <h3>Зулейха Ахмеджанова</h3>
+        <h4>Вожатая, преподаватель биологии и ИЗО.</h4>
+        <p>Самый добрый вожатый,</p>
+      </div>
+      <div class="team-card">
+        <img src="team5.jpg" alt="Джейла">
+        <h3>Джейла Билалова</h3>
+        <h4>Вожатая, преподаватель ИЗО и географии</h4>
+        <p>Помогает детям раскрыть внутренние таланты творчества и ведет интересные уроки географии.</p>
+      </div>
+      <div class="team-card">
+        <img src="team6.jpg" alt="Алихан">
+        <h3>Алихан</h3>
+        <h4>Вожатый</h4>
+        <p>Обеспечивает дисциплину и поддерживает детей.</p>
+      </div>
+      <div class="team-card">
+        <img src="jamal.png" alt="Джамаль">
+        <h3>Джамаль Багиров</h3>
+        <h4>Вожатый, тренер</h4>
+        <p>Проводит спортивные тренировки и физические активности.</p>
+      </div>
+      <div class="team-card">
+        <img src="raul.jpg" alt="Рауль Керимханов">
+        <h3>Рауль Керимханов</h3>
+        <h4>Вожатый,актер,педагог актерского мастерства</h4>
+        <p>Проводит уроки актерского мастерства детям,а также ставит спектакли в конце каждого заезда </p>
+      </div>
+
+    </div>
+  </section>
+
+  <hr>
+
+  <section id="contacts">
+    <h2>Контакты</h2>
+    <div class="contacts-content">
+      <div class="contact-left">
+        <p>Email: examplep@gmail.com</p>
+        <p>Телефон: +994 55 944 83 88</p>
+        <p>Адрес: Набрань, напротив El Faro</p>
+        <p>Instagram: crazykidsnabran</p>
+      </div>
+      <div class="contact-right">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1802.6950999685403!2d48.69346513284322!3d41.764428631087895!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40362f2e5b25b55d%3A0x6414477ea6d21ee1!2sEl%20Faro%20Hotel!5e1!3m2!1sru!2saz!4v1752431061768!5m2!1sru!2saz" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <div id="schedule" class="schedule-wrapper">
+    <section class="schedule-section">
+      <h2>Расписание Дня</h2>
+      <br>
+      <ul>
+        <li><b>- Подъем 8:00</b></li>
+        <li><b>- Зарядка 8:30</b></li>
+        <li><b>- Завтрак 9:00-10:00</b></li>
+        <li><b>- Свободное время 10:00-10:30</b></li>
+        <li><b>- Уроки 10:30-13:00</b></li>
+        <li><b>- Обед 13:00-14:00</b></li>
+        <li><b>- Тихий час 14:00-15:30</b></li>
+        <li><b>- Подготовка к бассейну 15:30-16:00</b></li>
+        <li><b>- Бассейн 16:00-18:00</b></li>
+        <li><b>- Свободное время 18:00-19:00</b></li>
+        <li><b>- Ужин 19:00-20:00</b></li>
+        <li><b>- Свободное время 20:00-20:30</b></li>
+        <li><b>- Дискотека 20:30-21:30</b></li>
+        <li><b>- Телефоны 21:30-22:30</b></li>
+        <li><b>- Подготовка ко сну 22:30-23:00</b></li>
+        <li><b>- Отбой 23:00</b></li>
+      </ul>
+      <br><br>
+    </section>
+  </div>
+
+  <footer>© 2023 Crazy Kids</footer>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById("menu").classList.toggle("active");
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      let currentSlide = 0;
+      const slides = document.querySelectorAll('.slide');
+
+      function showSlide(index) {
+        slides.forEach(slide => slide.classList.remove('active'));
+        slides[index].classList.add('active');
+        currentSlide = index;
+      }
+
+      window.nextSlide = function () {
+        const nextIndex = (currentSlide + 1) % slides.length;
+        showSlide(nextIndex);
+      }
+
+      window.prevSlide = function () {
+        const prevIndex = (currentSlide - 1 + slides.length) % slides.length;
+        showSlide(prevIndex);
+      }
+    });
+  </script>
+
+  <a href="https://wa.me/994559448388" target="_blank" class="whatsapp-button">
+  <img src="https://cdn-icons-png.flaticon.com/512/124/124034.png" alt="WhatsApp" />
+  </a>
+
+
+</body>
+</html>
+
+
